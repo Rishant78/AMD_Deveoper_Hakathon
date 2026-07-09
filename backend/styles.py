@@ -81,7 +81,13 @@ def generate_styles(caption):
     result = response.json()
 
     if "choices" not in result:
-        return result
+        error_msg = result.get("error", {}).get("message") if isinstance(result.get("error"), dict) else result.get("error", "Unknown API error")
+        return {
+            "formal": f"Error: {error_msg}",
+            "sarcastic": f"Error: {error_msg}",
+            "humorous_tech": f"Error: {error_msg}",
+            "humorous_nontech": f"Error: {error_msg}"
+        }
 
     styles_text = result["choices"][0]["message"]["content"]
     return parse_styles(styles_text)

@@ -11,8 +11,5 @@ UPLOAD_FOLDER = "uploads"
 
 OUTPUT_FOLDER = "outputs"
 
-FRAME_INTERVAL = 30
-
-BLUR_THRESHOLD = 40
-
-MAX_FRAMES = 10
+# Threshold for duplicate frame detection (grayscale absolute difference on 0-255 scale)
+DUP_THRESHOLD = 15.0

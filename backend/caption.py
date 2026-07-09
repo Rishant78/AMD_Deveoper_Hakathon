@@ -1,28 +1,17 @@
 import os
-
 from backend.fireworks import generate_caption
 
 
-def caption_frames(folder):
+def caption_video(saved_frames):
+    """
+    Generate captions for each saved frame in the list of frame dicts.
+    Modifies the dictionaries in-place by adding a 'caption' key.
+    """
+    for frame_info in saved_frames:
+        image_path = frame_info["frame_path"]
+        
+        # Call Fireworks to get the caption
+        caption = generate_caption(image_path)
+        frame_info["caption"] = caption
 
-    captions = []
-
-    files = sorted(os.listdir(folder))
-
-    for file in files:
-
-        if file.endswith(".jpg"):
-
-            image_path = os.path.join(folder, file)
-
-            caption = generate_caption(image_path)
-
-            captions.append(caption)
-
-    return captions
-
-def caption_video(folder):
-
-    captions = caption_frames(folder)
-
-    return captions
+    return saved_frames

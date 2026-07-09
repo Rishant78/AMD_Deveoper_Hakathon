@@ -1,4 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from backend.video import get_video_info
 from backend.video import extract_frames
 from backend.pipeline import process_video
@@ -10,8 +12,22 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to specific origins if needed in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 UPLOAD_FOLDER = "uploads"
+OUTPUT_FOLDER = "outputs"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+# Mount outputs folder to serve generated keyframes to the frontend
+app.mount("/outputs", StaticFiles(directory=OUTPUT_FOLDER), name="outputs")
 
 # Stores the most recently uploaded video
 latest_uploaded_video = None
@@ -45,7 +61,6 @@ async def upload_video(file: UploadFile = File(...)):
 
 @app.post("/extract")
 async def extract():
-
     global latest_uploaded_video
 
     if latest_uploaded_video is None:
@@ -54,12 +69,25 @@ async def extract():
         }
 
     result = extract_frames(latest_uploaded_video)
+    video_name = os.path.splitext(os.path.basename(latest_uploaded_video))[0]
+
+    frontend_frames = []
+    for f in result["saved_frames"]:
+        frontend_frames.append({
+            "filename": f["filename"],
+            "url": f"/outputs/{video_name}/{f['filename']}",
+            "timestamp_seconds": f["timestamp_seconds"],
+            "timestamp_formatted": f["timestamp_formatted"]
+        })
 
     return {
+        "success": True,
         "video": latest_uploaded_video,
         "frames_extracted": result["frames"],
-        "blurred_frames": result["blurred_frames"],
-        "output_folder": result["folder"]
+        "frames": frontend_frames,
+        "duration": result["duration"],
+        "total_frames": result["total_frames"],
+        "fps": result["fps"]
     }
 @app.get("/video-info")
 async def video_info():

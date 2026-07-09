@@ -65,6 +65,7 @@ def generate_caption(image_path):
     result = response.json()
 
     if "choices" not in result:
-        return result
+        error_msg = result.get("error", {}).get("message") if isinstance(result.get("error"), dict) else result.get("error", "Unknown API error")
+        return f"Error: {error_msg}"
 
     return result["choices"][0]["message"]["content"]

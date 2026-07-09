@@ -1,0 +1,18 @@
+[
+  {
+    "task_id": "v1",
+    "captions": {
+      "formal": "A young man crosses a busy urban street intersection during daytime.",
+      "sarcastic": "Plot twist: Spider-Man takes the scenic route through Manhattan traffic.",
+      "humorous_tech": "While(notAtDestination) { cross++; dodge++; }",
+      "humorous_non_tech": "Someone's really brave or really late for pizza."
+    }
+  },
+  {
+    "task_id": "v2",
+    "captions": {
+      "formal": "Urban pedestrian navigating crowded city sidewalk with foot traffic.",
+      "humorous_tech": "Parallel processing: one human.walk() while avoiding 50 other threads."
+    }
+  }
+]
