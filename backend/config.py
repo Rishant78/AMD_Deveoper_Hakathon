@@ -12,4 +12,4 @@ UPLOAD_FOLDER = "uploads"
 OUTPUT_FOLDER = "outputs"
 
 # Threshold for duplicate frame detection (grayscale absolute difference on 0-255 scale)
-DUP_THRESHOLD = 15.0
+DUP_THRESHOLD = 15.0
