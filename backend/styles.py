@@ -36,7 +36,7 @@ def parse_styles(text):
             styles[current] = line.replace("Humorous-Tech:", "").strip()
 
         elif line.startswith("Humorous-NonTech:"):
-            current = "humorous_nontech"
+            current = "humorous_non_tech"
             styles[current] = line.replace("Humorous-NonTech:", "").strip()
 
         elif current:
@@ -62,7 +62,7 @@ def generate_styles(caption):
             {
                 "role": "user",
                 "content": STYLE_PROMPT.format(
-                    caption=caption
+                     caption=caption
                 )
             }
         ],
@@ -86,7 +86,7 @@ def generate_styles(caption):
             "formal": f"Error: {error_msg}",
             "sarcastic": f"Error: {error_msg}",
             "humorous_tech": f"Error: {error_msg}",
-            "humorous_nontech": f"Error: {error_msg}"
+            "humorous_non_tech": f"Error: {error_msg}"
         }
 
     styles_text = result["choices"][0]["message"]["content"]

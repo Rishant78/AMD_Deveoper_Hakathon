@@ -197,7 +197,7 @@ Humorous-Tech:
 ${result.styles?.humorous_tech}
 
 Humorous-NonTech: 
-${result.styles?.humorous_nontech}
+${result.styles?.humorous_non_tech}
 
 =======================================================
 KEYFRAME TIMELINE DETAILS:
@@ -449,8 +449,8 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                     Humorous-Tech
                   </button>
                   <button 
-                    className={`tab-btn ${activeStyle === 'humorous_nontech' ? 'active' : ''}`}
-                    onClick={() => setActiveStyle('humorous_nontech')}
+                    className={`tab-btn ${activeStyle === 'humorous_non_tech' ? 'active' : ''}`}
+                    onClick={() => setActiveStyle('humorous_non_tech')}
                   >
                     Humorous-NonTech
                   </button>

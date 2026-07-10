@@ -2,9 +2,10 @@
   {
     "task_id": "test-001",
     "captions": {
-      "formal": " A whimsical, animated scene depicts white rabbits and a cat with butterfly wings relaxing and standing joyfully in a sunny, purple-flowered green meadow.",
-      "sarcastic": " Because nothing says \"normal\" like a cat wearing butterfly wings hanging out with white rabbits in a suspiciously perfect, sunny meadow full of purple flowers.",
-      "humorous_tech": " Rendering complete: White rabbits and a winged cat avatar spawn in a high-res sunny meadow. Purple flower assets loaded. Whimsy engine running at maximum joy settings."
+      "formal": " Vehicles traverse a multi-lane urban avenue flanked by bright yellow autumn foliage, with high-rise residential structures forming the backdrop.",
+      "sarcastic": " Oh look, cars on a road. Groundbreaking. The trees are yellow, the buildings are tall. Try not to be overwhelmed by the sheer excitement of this mundane city scene.",
+      "humorous_tech": " Rendering complete: urban traffic simulation running on multi-lane hardware. Texture pack: Vibrant Yellow Autumn. Background assets: High-poly apartment blocks. No bugs detected in this picturesque city drive.",
+      "humorous_non_tech": " The trees put on their best yellow suits for the cars\u2019 daily commute. Meanwhile, the apartment buildings loom in the back like giant, concrete spectators watching the leafy parade."
     }
   }
 ]

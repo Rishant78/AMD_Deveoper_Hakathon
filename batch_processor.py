@@ -69,11 +69,11 @@ def process_task(task):
             "captions": filtered_styles
         }
         
-        print(f"✓ Task {task_id} completed successfully")
+        print(f"[SUCCESS] Task {task_id} completed successfully")
         return result
         
     except Exception as e:
-        print(f"✗ Error processing task {task_id}: {e}")
+        print(f"[ERROR] Error processing task {task_id}: {e}")
         return {
             "task_id": task_id,
             "error": str(e)
@@ -82,11 +82,13 @@ def process_task(task):
 
 def main():
     """Main batch processor entry point."""
-    input_file = "/input/tasks.json"
-    output_file = "/output/results.json"
+    input_file = os.getenv("INPUT_TASKS_PATH", "/input/tasks.json")
+    output_file = os.getenv("OUTPUT_RESULTS_PATH", "/output/results.json")
     
     # Ensure output directory exists
-    os.makedirs("/output", exist_ok=True)
+    output_dir = os.path.dirname(output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
     
     print("=" * 50)
@@ -113,19 +115,26 @@ def main():
     
     # Process each task
     results = []
+    has_errors = False
     for task in tasks:
         result = process_task(task)
+        if "error" in result:
+            has_errors = True
         results.append(result)
     
     # Write results
     try:
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=2)
-        print(f"\n✓ Results written to {output_file}")
+        print(f"\n[SUCCESS] Results written to {output_file}")
     except Exception as e:
         print(f"Error writing output file: {e}")
         sys.exit(1)
     
+    if has_errors:
+        print("\n[ERROR] Batch processing completed with errors.")
+        sys.exit(1)
+        
     print("\n" + "=" * 50)
     print("Batch processing complete!")
     print("=" * 50)
