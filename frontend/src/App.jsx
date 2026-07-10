@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://amd-deveoper-hakathon.onrender.com';
 
 function App() {
   // Application State
@@ -9,7 +9,7 @@ function App() {
   const [videoUrl, setVideoUrl] = useState('');
   const [status, setStatus] = useState('idle'); // idle | uploading | processing | success | error
   const [error, setError] = useState('');
-  
+
   // Processing Stepper
   const [currentStep, setCurrentStep] = useState(1);
   const [steps, setSteps] = useState([
@@ -24,12 +24,12 @@ function App() {
   const [activeStyle, setActiveStyle] = useState('formal');
   const [zoomFrame, setZoomFrame] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
-  
+
   const fileInputRef = useRef(null);
 
   // Auto-updating steps status when currentStep changes
   useEffect(() => {
-    setSteps(prevSteps => 
+    setSteps(prevSteps =>
       prevSteps.map(step => {
         if (step.id < currentStep) return { ...step, status: 'completed' };
         if (step.id === currentStep) return { ...step, status: 'active' };
@@ -85,7 +85,7 @@ function App() {
 
     // Setup visual simulated milestones timer for subsequent processing phases
     let stepInterval = null;
-    
+
     try {
       // 1. Upload Video file to server
       const formData = new FormData();
@@ -130,7 +130,7 @@ function App() {
       }
 
       const pipelineResult = await captionResponse.json();
-      
+
       if (!pipelineResult.success) {
         throw new Error(pipelineResult.error || 'Failed to analyze video contents.');
       }
@@ -214,7 +214,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
 
   const handleExportSRT = () => {
     if (!result || !result.frames) return;
-    
+
     // Subtitle formatter helper: converts seconds to HH:MM:SS,mmm
     const formatSRTTime = (seconds) => {
       const pad = (num, size) => ('000' + num).slice(-size);
@@ -232,8 +232,8 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
     for (let i = 0; i < frames.length; i++) {
       const start = frames[i].timestamp_seconds;
       // Set end time to next frame timestamp, or start + 4s (or video end) if last frame
-      const end = i < frames.length - 1 
-        ? frames[i + 1].timestamp_seconds 
+      const end = i < frames.length - 1
+        ? frames[i + 1].timestamp_seconds
         : Math.min(start + 4.0, duration);
 
       srtContent += `${i + 1}\n`;
@@ -260,7 +260,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
         {status === 'idle' && (
           <div className="glass-card">
             {!file ? (
-              <div 
+              <div
                 className="upload-container"
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
@@ -270,8 +270,8 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                 <h3>Upload Video File</h3>
                 <p>Drag and drop your MP4, AVI, or MOV video here, or click to browse</p>
                 <button className="btn-primary">Browse System Files</button>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   ref={fileInputRef}
                   className="file-input"
                   accept="video/*"
@@ -301,14 +301,14 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
               <div className="spinner-inner"></div>
               <div className="spinner-logo">AI</div>
             </div>
-            
+
             <div style={{ textAlign: 'center' }}>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                 {status === 'uploading' ? 'Uploading Video Content...' : 'Analyzing Video Timeline...'}
               </h3>
               <p style={{ color: 'var(--text-secondary)' }}>
-                {status === 'uploading' 
-                  ? 'Transferring video file to FastAPI processing server...' 
+                {status === 'uploading'
+                  ? 'Transferring video file to FastAPI processing server...'
                   : 'Fireworks Vision model is parsing representative frame components...'}
               </p>
             </div>
@@ -339,10 +339,10 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
 
         {status === 'success' && result && (
           <div className="dashboard-grid">
-            
+
             {/* Sidebar Column: Video and Timeline */}
             <div className="dashboard-sidebar">
-              
+
               {/* Video Info Section */}
               <div className="glass-card">
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
@@ -380,15 +380,15 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                 <div className="timeline-scroll">
                   {result.frames?.map((frame, idx) => (
                     <div key={idx} className="timeline-card">
-                      <div 
+                      <div
                         className="timeline-thumbnail-container"
                         onClick={() => setZoomFrame(frame)}
                         title="Click to zoom frame"
                       >
-                        <img 
-                          src={`${API_BASE_URL}${frame.url}`} 
-                          alt={`Frame at ${frame.timestamp_formatted}`} 
-                          className="timeline-thumbnail" 
+                        <img
+                          src={`${API_BASE_URL}${frame.url}`}
+                          alt={`Frame at ${frame.timestamp_formatted}`}
+                          className="timeline-thumbnail"
                         />
                         <span className="timeline-time-badge">{frame.timestamp_formatted}</span>
                       </div>
@@ -404,7 +404,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
 
             {/* Main Results Column: Overall + Styled Captions */}
             <div className="dashboard-main">
-              
+
               {/* Overall Caption card */}
               <div className="glass-card summary-container">
                 <div className="summary-heading">
@@ -412,7 +412,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                 </div>
                 <p className="summary-text">"{typeof result.video_caption === 'string' ? result.video_caption : 'Caption unavailable'}"</p>
                 <div className="card-actions">
-                  <button 
+                  <button
                     className="btn-secondary"
                     onClick={() => copyToClipboard(result.video_caption, 'Overall Summary')}
                   >
@@ -430,25 +430,25 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
 
                 {/* Styled tab switcher */}
                 <div className="styles-tab-bar">
-                  <button 
+                  <button
                     className={`tab-btn ${activeStyle === 'formal' ? 'active' : ''}`}
                     onClick={() => setActiveStyle('formal')}
                   >
                     Formal
                   </button>
-                  <button 
+                  <button
                     className={`tab-btn ${activeStyle === 'sarcastic' ? 'active' : ''}`}
                     onClick={() => setActiveStyle('sarcastic')}
                   >
                     Sarcastic
                   </button>
-                  <button 
+                  <button
                     className={`tab-btn ${activeStyle === 'humorous_tech' ? 'active' : ''}`}
                     onClick={() => setActiveStyle('humorous_tech')}
                   >
                     Humorous-Tech
                   </button>
-                  <button 
+                  <button
                     className={`tab-btn ${activeStyle === 'humorous_non_tech' ? 'active' : ''}`}
                     onClick={() => setActiveStyle('humorous_non_tech')}
                   >
@@ -463,7 +463,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                     "{result.styles && typeof result.styles[activeStyle] === 'string' ? result.styles[activeStyle] : 'No caption loaded'}"
                   </p>
                   <div className="card-actions">
-                    <button 
+                    <button
                       className="btn-secondary"
                       onClick={() => copyToClipboard(result.styles[activeStyle], `${activeStyle.charAt(0).toUpperCase() + activeStyle.slice(1).replace('_', ' ')} caption`)}
                     >
@@ -488,7 +488,7 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
                   </button>
                 </div>
               </div>
-              
+
             </div>
 
           </div>
@@ -500,9 +500,9 @@ ${result.frames?.map(f => `[${f.timestamp_formatted}] - ${f.caption}`).join('\n'
         <div className="modal-overlay" onClick={() => setZoomFrame(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close-btn" onClick={() => setZoomFrame(null)}>×</button>
-            <img 
-              src={`${API_BASE_URL}${zoomFrame.url}`} 
-              alt={`Frame at ${zoomFrame.timestamp_formatted}`} 
+            <img
+              src={`${API_BASE_URL}${zoomFrame.url}`}
+              alt={`Frame at ${zoomFrame.timestamp_formatted}`}
               className="modal-image"
             />
             <div className="modal-footer">
